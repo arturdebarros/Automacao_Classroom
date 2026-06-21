@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="English Mastery — Teacher Dashboard. Create and manage English class activities for your students.">
+  <title>Teacher Dashboard — English Mastery</title>
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <style>
+    /* ── Password Gate ── */
+    .password-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-base);
+    }
+
+    /* ── Dashboard Layout ── */
+    #dashboard-wrapper {
+      display: none;
+      min-height: 100vh;
+    }
+
+    /* ── Upload Form ── */
+    .form-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-xl);
+      padding: var(--sp-6);
+      margin-bottom: var(--sp-8);
+    }
+
+    .form-section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      margin-bottom: var(--sp-5);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-4);
+    }
+
+    @media (max-width: 640px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── Skill color dots in sidebar ── */
+    .area-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-grammar       { background: var(--grammar-color); }
+    .dot-listening     { background: var(--listening-color); }
+    .dot-speaking      { background: var(--speaking-color); }
+    .dot-writing       { background: var(--writing-color); }
+    .dot-reading       { background: var(--reading-color); }
+    .dot-pronunciation { background: var(--pronunciation-color); }
+
+    /* ── Publish checkbox ── */
+    .publish-row {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      padding: var(--sp-3) var(--sp-4);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-md);
+      cursor: pointer;
+    }
+
+    .publish-row input[type="checkbox"] {
+      width: 18px; height: 18px;
+      accent-color: var(--grammar-color);
+      cursor: pointer;
+    }
+
+    .publish-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .publish-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Activity list section ── */
+    .list-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-xl);
+      padding: var(--sp-6);
+    }
+
+    .list-section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--sp-5);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+
+    /* ── Back link ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: var(--sp-2) var(--sp-3);
+      border-radius: var(--r-md);
+      border: 1px solid var(--border-subtle);
+      transition: all var(--t-fast);
+      background: var(--bg-card);
+    }
+
+    .back-link:hover {
+      color: var(--text-primary);
+      border-color: var(--border-default);
+      background: var(--bg-card-hover);
+    }
+
+    /* ── Info tip box ── */
+    .tip-box {
+      background: rgba(129,140,248,0.08);
+      border: 1px solid rgba(129,140,248,0.2);
+      border-radius: var(--r-md);
+      padding: var(--sp-3) var(--sp-4);
+      font-size: 0.82rem;
+      color: var(--grammar-light);
+      margin-bottom: var(--sp-6);
+    }
+
+    /* ── Stats minibar ── */
+    .stats-minibar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-2);
+      margin-bottom: var(--sp-5);
+    }
+
+    .stats-mini-item {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-md);
+      padding: var(--sp-2) var(--sp-3);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--t-fast);
+    }
+
+    .stats-mini-item:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-default);
+    }
+
+    .stats-mini-num {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background -->
+  <div class="bg-mesh" aria-hidden="true">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       PASSWORD GATE
+  ══════════════════════════════════════════════════════════ -->
+  <div id="password-gate" class="password-gate">
+    <div class="password-card">
+      <div class="password-icon" aria-hidden="true">🔐</div>
+      <h1 style="font-size:1.4rem; font-weight:800; letter-spacing:-0.03em; margin-bottom:var(--sp-2);">
+        Teacher Access
+      </h1>
+      <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:var(--sp-6);">
+        Enter your password to access the teacher dashboard.
+      </p>
+
+      <form id="password-form" style="display: flex; flex-direction: column; gap: var(--sp-3); text-align:left;">
+        <div class="form-group">
+          <label class="form-label" for="teacher-username">Username</label>
+          <input type="text" id="teacher-username" class="form-input" placeholder="Enter username..." required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password-input">Password</label>
+          <input type="password" id="password-input" class="form-input" placeholder="Enter password..." required>
+        </div>
+        <div id="password-error" style="color:var(--writing-color); font-size:0.78rem; min-height:1rem; margin-top:var(--sp-1);"></div>
+        <button type="submit" class="btn btn-primary w-full" style="margin-top:var(--sp-2);">
+          🔓 Enter Dashboard
+        </button>
+      </form>
+
+      <div style="margin-top:var(--sp-5); padding-top:var(--sp-5); border-top:1px solid var(--border-subtle);">
+        <a href="index.html" class="back-link" style="display:inline-flex;">
+          ← Back to Student Portal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       DASHBOARD
+  ══════════════════════════════════════════════════════════ -->
+  <div id="dashboard-wrapper" class="dashboard-layout">
+
+    <!-- ── NAVBAR ──────────────────────────────────────────── -->
+    <nav class="navbar" role="navigation" aria-label="Teacher navigation">
+      <div class="navbar-inner">
+        <div style="display:flex; align-items:center; gap:var(--sp-4);">
+          <div class="navbar-logo">
+            <div class="navbar-logo-icon" aria-hidden="true">🎓</div>
+            <div>
+              <div class="navbar-brand">English Mastery</div>
+              <div class="navbar-sub">Teacher Dashboard</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:var(--sp-3);">
+          <!-- Theme toggle -->
+          <button
+            data-theme-toggle
+            onclick="Theme.toggle()"
+            style="background:none; border:none; cursor:pointer; font-size:1.2rem; padding:0.25rem; border-radius:8px; transition:opacity 0.2s;"
+            aria-label="Alternar tema">
+            <span data-theme-icon>☀️</span>
+          </button>
+
+          <a href="index.html" class="back-link hide-mobile">
+            👁️ View as Student
+          </a>
+          <button class="btn btn-ghost btn-sm" onclick="logout()">
+            🚪 Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── SIDEBAR ─────────────────────────────────────────── -->
+    <aside class="sidebar" role="complementary" aria-label="Area navigation">
+      <!-- Section Selection -->
+      <div class="sidebar-section" style="margin-bottom: var(--sp-4); border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--sp-4);">
+        <div class="sidebar-label">Dashboard Section</div>
+        <div class="sidebar-nav-item active" id="tab-btn-custom" onclick="switchMainTab('custom')" role="button" tabindex="0">
+          <div class="sidebar-nav-item-left">
+            <span class="sidebar-nav-icon">📝</span>
+            Custom Activities
+          </div>
+        </div>
+        <div class="sidebar-nav-item" id="tab-btn-curriculum" onclick="switchMainTab('curriculum')" role="button" tabindex="0">
+          <div class="sidebar-nav-item-left">
+            <span class="sidebar-nav-icon">📅</span>
+            52-Week Program
+          </div>
+        </div>
+        <div class="sidebar-nav-item" id="tab-btn-students" onclick="switchMainTab('students')" role="button" tabindex="0">
+          <div class="sidebar-nav-item-left">
+            <span class="sidebar-nav-icon">👥</span>
+            My Students
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Activities Filter Group -->
+      <div id="sidebar-custom-group">
+        <div class="sidebar-section">
+          <div class="sidebar-label">Skill Areas</div>
+
+          <div class="sidebar-nav-item active" data-area="all" onclick="sidebarFilter('all')" role="button" tabindex="0">
+            <div class="sidebar-nav-item-left">
+              <span class="sidebar-nav-icon">📋</span>
+              All Activities
+          </div>
+          <span class="sidebar-count" id="sidebar-count-all">0</span>
+        </div>
+
+        <div class="sidebar-nav-item" data-area="grammar" onclick="sidebarFilter('grammar')" role="button" tabindex="0">
+          <div class="sidebar-nav-item-left">
+            <span class="sidebar-nav-icon">📖</span>
+            Grammar
+          </div>
+          <span class="sidebar-count" id="sidebar-count-grammar">0</span>
+        </div>
+
+        <div class="sidebar-nav-item" data-area="listening" onclick="sidebarFilter('listening')" role="button" tabindex="0">
+          <div class="sidebar-nav-item-left">
+            <span class="sidebar-nav-icon">🎧</span>
+            Listening
+          </div>
+          <span class="sidebar-count" id="sidebar-count-listening">0</span>
+        </div>
+
+        <div class="sidebar-nav-item" data-area="speaking" onclick="sidebarFilter('speaking')" role="button" tabindex="0">
+          <div class="sidebar-nav-item-left">
+            <span class="sidebar-nav-icon">🗣️</span>
+            Speaking
+          </div>
+          <span class="sidebar-count" id="sidebar-count-speaking">0</span>
+        </div>
+
+        <div class="sidebar-nav-item" data-area="writing" onclick="sidebarFilter('writing')" role="button" tabindex="0">
+          <div class="sidebar-nav-item-left">
+            <span class="sidebar-nav-icon">✍️</span>
+            Writing
+          </div>
+          <span class="sidebar-count" id="sidebar-count-writing">0</span>
+        </div>
+
+        <div class="sidebar-nav-item" data-area="reading" onclick="sidebarFilter('reading')" role="button" tabindex="0">
+          <div class="sidebar-nav-item-left">
+            <span class="sidebar-nav-icon">👁️</span>
+            Reading
+          </div>
+          <span class="sidebar-count" id="sidebar-count-reading">0</span>
+        </div>
+
+        <div class="sidebar-nav-item" data-area="pronunciation" onclick="sidebarFilter('pronunciation')" role="button" tabindex="0">
+          <div class="sidebar-nav-item-left">
+            <span class="sidebar-nav-icon">🔊</span>
+            Pronunciation
+          </div>
+          <span class="sidebar-count" id="sidebar-count-pronunciation">0</span>
+        </div>
+      </div>
+
+      <!-- Sidebar Stats -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">Published Activities</div>
+        <div style="display:flex; flex-direction:column; gap:var(--sp-2); padding:0 var(--sp-2);">
+          <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+            <span style="color:var(--text-muted);">📖 Grammar</span>
+            <span id="stat-grammar" style="font-weight:700; color:var(--grammar-color);">0</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+            <span style="color:var(--text-muted);">🎧 Listening</span>
+            <span id="stat-listening" style="font-weight:700; color:var(--listening-color);">0</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+            <span style="color:var(--text-muted);">🗣️ Speaking</span>
+            <span id="stat-speaking" style="font-weight:700; color:var(--speaking-color);">0</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+            <span style="color:var(--text-muted);">✍️ Writing</span>
+            <span id="stat-writing" style="font-weight:700; color:var(--writing-color);">0</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+            <span style="color:var(--text-muted);">👁️ Reading</span>
+            <span id="stat-reading" style="font-weight:700; color:var(--reading-color);">0</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+            <span style="color:var(--text-muted);">🔊 Pronunciation</span>
+            <span id="stat-pronunciation" style="font-weight:700; color:var(--pronunciation-color);">0</span>
+          </div>
+        </div>
+      </div>
+      </div><!-- /#sidebar-custom-group -->
+
+      <!-- Quick tip -->
+      <div class="sidebar-section">
+        <div class="tip-box" style="font-size:0.78rem; margin-bottom:0;">
+          💡 Use the toggle switch on each activity to publish or unpublish it for students.
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ────────────────────────────────────── -->
+    <main class="dashboard-main" role="main">
+      <div id="view-custom">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">Activity Manager</h1>
+          <p class="dashboard-subtitle">Create, edit and publish activities for your students.</p>
+        </div>
+
+      <!-- ── ACTIVITY UPLOAD FORM ─────────────────────────── -->
+      <section class="form-section" aria-label="Create new activity">
+        <h2 class="form-section-title" id="form-section-title">➕ New Activity</h2>
+
+        <form id="activity-form" novalidate>
+
+          <!-- Row 1: Area + Type -->
+          <div class="form-row" style="margin-bottom: var(--sp-3);">
+            <div class="form-group">
+              <label class="form-label" for="form-area">Skill Area <span>*</span></label>
+              <select class="form-select" id="form-area" required>
+                <option value="">Select area...</option>
+                <!-- Options added by teacher.js -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="form-type">Activity Type</label>
+              <select class="form-select" id="form-type">
+                <option value="text">📝 Text / Exercise</option>
+                <option value="audio">🎧 Audio Listening</option>
+                <option value="speaking_prompt">🗣️ Speaking Prompt</option>
+                <option value="writing_prompt">✍️ Writing Prompt</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Target Student -->
+          <div class="form-group">
+            <label class="form-label" for="form-student">Target Student</label>
+            <select class="form-select" id="form-student">
+              <option value="all">All Students (Global)</option>
+              <!-- Loaded dynamically by JS -->
+            </select>
+          </div>
+
+          <!-- Title -->
+          <div class="form-group">
+            <label class="form-label" for="form-title">Title <span>*</span></label>
+            <input
+              class="form-input"
+              type="text"
+              id="form-title"
+              placeholder="e.g. Present Perfect vs. Simple Past"
+              required
+              maxlength="120"
+            >
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label class="form-label" for="form-desc">Description / Instructions</label>
+            <input
+              class="form-input"
+              type="text"
+              id="form-desc"
+              placeholder="Brief instructions for students..."
+              maxlength="280"
+            >
+          </div>
+
+          <!-- Content -->
+          <div class="form-group" id="content-group">
+            <label class="form-label" id="content-label" for="form-content">Content (supports **bold**, *italic*, • bullets)</label>
+            <textarea
+              class="form-textarea"
+              id="form-content"
+              placeholder="Write the activity content here. Use **bold**, *italic*, • for bullet points, and 1. 2. 3. for numbered lists."
+              rows="7"
+            ></textarea>
+            <span class="form-hint">Supports simple markdown: **bold**, *italic*, • bullets, numbered lists.</span>
+          </div>
+
+          <!-- Audio Upload (shown only for audio type) -->
+          <div class="form-group" id="audio-upload-section" style="display:none;">
+            <label class="form-label">Audio File</label>
+            <div class="file-upload">
+              <input type="file" id="form-audio" accept="audio/*" aria-label="Upload audio file">
+              <div class="file-upload-icon" aria-hidden="true">🎵</div>
+              <div class="file-upload-text">Click or drag an audio file here</div>
+              <div class="file-upload-sub" id="audio-file-name">MP3, WAV, M4A, OGG — Max 20MB recommended</div>
+            </div>
+            <span class="form-hint">⚠️ Audio is stored in the browser. Large files may slow the page.</span>
+          </div>
+
+          <!-- Publish toggle -->
+          <div class="form-group">
+            <label class="publish-row" for="form-publish">
+              <input type="checkbox" id="form-publish">
+              <div>
+                <div class="publish-label">Publish immediately</div>
+                <div class="publish-hint">Students can see published activities. Leave unchecked to save as a draft.</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Form Actions -->
+          <div style="display:flex; gap:var(--sp-3); align-items:center; flex-wrap:wrap;">
+            <button type="submit" class="btn btn-primary" id="submit-btn">
+              <span id="submit-btn-text">Create Activity</span>
+            </button>
+            <button type="button" class="btn btn-ghost" id="cancel-edit-btn" onclick="cancelEdit()" style="display:none;">
+              ✕ Cancel Edit
+            </button>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- ── ACTIVITY LIST ──────────────────────────────────── -->
+      <section class="list-section" aria-label="Activity manager">
+        <div class="activity-list-header">
+          <h2 class="list-section-title" style="margin-bottom:0;">📋 All Activities</h2>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="filter-bar" style="margin-bottom:var(--sp-5);" role="group" aria-label="Filter by area">
+          <button class="filter-chip active" data-area="all">All</button>
+          <button class="filter-chip" data-area="grammar">📖 Grammar</button>
+          <button class="filter-chip" data-area="listening">🎧 Listening</button>
+          <button class="filter-chip" data-area="speaking">🗣️ Speaking</button>
+          <button class="filter-chip" data-area="writing">✍️ Writing</button>
+          <button class="filter-chip" data-area="reading">👁️ Reading</button>
+          <button class="filter-chip" data-area="pronunciation">🔊 Pronunciation</button>
+        </div>
+
+        <!-- List rendered by teacher.js -->
+        <div id="activity-list" role="list" aria-live="polite" aria-label="Activity list">
+          <div class="empty-state">
+            <div class="empty-state-icon">📋</div>
+            <div class="empty-state-title">No activities yet</div>
+            <div class="empty-state-text">Create your first activity using the form above.</div>
+          </div>
+        </div><!-- /#activity-list -->
+      </section><!-- /.list-section -->
+      </div><!-- /#view-custom -->
+
+      <!-- ── CURRICULUM TAB VIEW ── -->
+      <div id="view-curriculum" class="hidden">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">52-Week Program Manager</h1>
+          <p class="dashboard-subtitle">Manage and enrich core activities for the 52-week program.</p>
+        </div>
+
+        <section class="list-section">
+          <div class="tip-box" style="margin-top: 0; margin-bottom: var(--sp-6);">
+            💡 Clique em qualquer semana para editar as atividades dos 5 slots de habilidades. As alterações ficam salvas no navegador.
+          </div>
+          <div class="curriculum-grid" id="curriculum-weeks-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+      </div>
+
+      <!-- ── MY STUDENTS TAB VIEW ── -->
+      <div id="view-students" class="hidden">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">My Students & Board Logs</h1>
+          <p class="dashboard-subtitle">Track progress, grade submissions, and log diary entries for your students.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 280px 1fr; gap: var(--sp-6);">
+          <!-- Left: Students List -->
+          <div class="list-section" style="padding: var(--sp-4); height: 500px; display: flex; flex-direction: column;">
+            <h2 class="list-section-title" style="margin-bottom: var(--sp-3); font-size: 0.9rem;">👥 Student List</h2>
+            <div id="teacher-students-list" style="overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 4px;">
+              <!-- Populated by teacher.js -->
+            </div>
+          </div>
+
+          <!-- Right: Selected Student Details & Log -->
+          <div class="list-section" id="student-detail-panel" style="padding: var(--sp-6); height: 500px; display: flex; flex-direction: column;">
+            <div id="no-student-selected" style="margin: auto; text-align: center; color: var(--text-muted);">
+              <div style="font-size: 2.5rem; margin-bottom: var(--sp-3);">📓</div>
+              <p>Select a student to view their profile, submit grades, and access their board log.</p>
+            </div>
+
+            <div id="student-active-detail" class="hidden flex flex-col h-full overflow-hidden">
+              <!-- Student Header -->
+              <div style="display: flex; justify-content: space-between; align-items: start; border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--sp-4); margin-bottom: var(--sp-4); flex-shrink: 0;">
+                <div>
+                  <h2 id="active-student-name" style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary);">Student Name</h2>
+                  <p id="active-student-meta" style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">@username | Week 1</p>
+                </div>
+                <div class="filter-bar" style="margin-bottom: 0; display: flex; gap: 4px;">
+                  <button class="filter-chip active text-xs" id="sub-tab-btn-submissions" onclick="switchStudentSubTab('submissions')">Submissions</button>
+                  <button class="filter-chip text-xs" id="sub-tab-btn-board-log" onclick="switchStudentSubTab('board-log')">Board Log</button>
+                </div>
+              </div>
+
+              <!-- Content Area: Submissions -->
+              <div id="student-sub-tab-submissions" class="flex-1 overflow-y-auto pr-2 space-y-4">
+                <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); margin-bottom: var(--sp-3);">Completed Activities</h3>
+                <div id="student-submissions-list" class="space-y-3">
+                  <!-- Load student progress list -->
+                </div>
+              </div>
+
+              <!-- Content Area: Board Log -->
+              <div id="student-sub-tab-board-log" class="hidden flex-1 flex flex-col overflow-hidden">
+                <div class="flex-1 overflow-y-auto pr-2 space-y-4 mb-4" id="student-board-log-entries">
+                  <!-- Load log entries -->
+                </div>
+                <form id="add-board-log-form" style="display: flex; gap: var(--sp-3); align-items: end; border-t: 1px solid var(--border-subtle); padding-top: var(--sp-3); flex-shrink: 0;">
+                  <div style="flex: 1;">
+                    <label class="form-label" for="board-log-content">New Diary / Progress Entry</label>
+                    <textarea id="board-log-content" placeholder="Enter session notes, homework, grammar feedback, next steps..." class="form-textarea" rows="2" style="padding: 0.5rem;" required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; height: 38px;">Add Log</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div><!-- /#dashboard-wrapper -->
+
+  <!-- ══ DELETE CONFIRM MODAL ══════════════════════════════ -->
+  <div class="modal-overlay" id="overlay-delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🗑️</span>
+          <span id="delete-modal-title">Delete Activity?</span>
+        </div>
+        <button class="modal-close" onclick="closeDeleteModal()" aria-label="Cancel">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.9rem; color:var(--text-secondary); line-height:1.6;">
+          This action is permanent and cannot be undone. The activity will be removed from the student portal immediately.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete-btn">Delete Permanently</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CURRICULUM DETAIL MODAL ══════════════════════════ -->
+  <div class="modal-overlay" id="overlay-curriculum-modal" role="dialog" aria-modal="true" aria-labelledby="curriculum-modal-title">
+    <div class="modal modal-lg" style="max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>📅</span>
+          <span id="curriculum-modal-title">Week Activities</span>
+        </div>
+        <button class="modal-close" onclick="closeCurriculumModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="curriculum-modal-body" style="overflow-y: auto; flex: 1;">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeCurriculumModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCRIPTS ════════════════════════════════════════════ -->
+  <script src="js/theme.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/curriculum.js"></script>
+  <script src="js/teacher.js"></script>
+
+  <script>
+    // Init theme
+    Theme.init();
+
+    // Update all-count in sidebar after load
+    window.addEventListener('load', () => {
+      const allCounts = document.getElementById('sidebar-count-all');
+      if (allCounts) {
+        allCounts.textContent = Storage.getAllActivities().length;
+      }
+    });
+
+    // Sidebar keyboard accessibility
+    document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+      item.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          item.click();
+        }
+      });
+    });
+
+    // Close overlay modals on backdrop click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) {
+          overlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+
+    // Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(o => o.classList.remove('active'));
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+</html>

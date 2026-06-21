@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="English Mastery — Painel do Aluno. Seu programa de inglês de 52 semanas, atividades de hoje, progresso e sequência de estudos.">
+  <title>Meu Painel — English Mastery</title>
+
+  <!-- Tailwind CSS v3 (Play CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            zinc: { 950: '#09090B' },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.3s ease-out',
+            'slide-up': 'slideUp 0.35s ease-out',
+            'ring-fill': 'ringFill 1s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn:  { from: { opacity: '0' }, to: { opacity: '1' } },
+            slideUp: { from: { opacity: '0', transform: 'translateY(12px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Vanilla CSS theme tokens for light mode compatibility -->
+  <link rel="stylesheet" href="css/main.css">
+
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #3F3F46; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #52525B; }
+
+    /* Modal overlay */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 50;
+      background: rgba(0,0,0,0.75);
+      display: none; align-items: center; justify-content: center;
+      padding: 1rem;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .modal-overlay.active { display: flex; }
+
+    /* Light mode overrides */
+    html.light .dark\:text-zinc-100 { color: #18181B; }
+    html.light body { background: #F4F4F5; }
+    html.light .bg-zinc-950 { background: #F4F4F5; }
+    html.light .bg-zinc-900 { background: #FFFFFF; }
+    html.light .bg-zinc-900\/60 { background: rgba(255,255,255,0.6); }
+    html.light .border-zinc-800 { border-color: #E4E4E7; }
+    html.light .border-zinc-700 { border-color: #D4D4D8; }
+    html.light .text-zinc-100 { color: #18181B; }
+    html.light .text-zinc-200 { color: #27272A; }
+    html.light .text-zinc-300 { color: #3F3F46; }
+    html.light .text-zinc-400 { color: #52525B; }
+    html.light .text-zinc-500 { color: #71717A; }
+    html.light .text-zinc-600 { color: #A1A1AA; }
+    html.light .bg-zinc-800 { background: #F4F4F5; }
+    html.light .bg-zinc-800\/50 { background: rgba(244,244,245,0.5); }
+    html.light .bg-zinc-800\/70 { background: rgba(244,244,245,0.7); }
+    html.light .hover\:bg-zinc-800:hover { background: #E4E4E7; }
+    html.light .hover\:bg-zinc-800\/70:hover { background: rgba(228,228,231,0.7); }
+    html.light #heatmap-grid [style*="background:#27272A"] { filter: invert(0.92) hue-rotate(180deg); }
+    html.light #heatmap-grid [style*="background:#1C1C1F"] { background: #F0F0F0 !important; }
+
+    /* Speaking recorder styles */
+    .record-btn {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #27272A;
+      border: 2px solid #3F3F46;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.5rem;
+    }
+    .record-btn:hover { border-color: #EF4444; background: rgba(239,68,68,0.1); }
+    .record-btn.recording { background: rgba(239,68,68,0.2); border-color: #EF4444; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); } 50% { box-shadow: 0 0 0 8px rgba(239,68,68,0); } }
+
+    /* Toast */
+    #week-complete-toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      z-index: 100; transition: opacity 0.6s ease;
+      white-space: nowrap;
+    }
+
+    /* Line clamp */
+    .line-clamp-2 {
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+  </style>
+</head>
+
+<body class="bg-zinc-950 text-zinc-100 h-screen flex overflow-hidden">
+
+  <!-- Auth guard -->
+  <script>
+    if (!sessionStorage.getItem('em_access_token')) {
+      window.location.href = 'index.html';
+    }
+  </script>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════════════════════════ -->
+  <aside class="w-56 flex-shrink-0 bg-zinc-900 border-r border-zinc-800 flex flex-col h-screen z-10">
+
+    <!-- Logo -->
+    <div class="p-4 border-b border-zinc-800">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-base flex-shrink-0">🎓</div>
+        <div class="min-w-0">
+          <div class="font-bold text-sm text-zinc-100 leading-tight">English Mastery</div>
+          <div class="text-xs text-zinc-500 truncate" data-user-name>Carregando...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 p-2 space-y-0.5 overflow-y-auto" role="navigation" aria-label="Navegação principal">
+      <button data-nav="home" onclick="showSection('home')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-left"
+        aria-label="Ir para Início">
+        <span class="text-base w-5">🏠</span>
+        <span>Início</span>
+      </button>
+
+      <button data-nav="program" onclick="showSection('program')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-left text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+        aria-label="Ver Programa de 52 Semanas">
+        <span class="text-base w-5">📅</span>
+        <span>52 Semanas</span>
+      </button>
+
+      <button data-nav="progress" onclick="showSection('progress')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-left text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+        aria-label="Ver Progresso">
+        <span class="text-base w-5">📊</span>
+        <span>Progresso</span>
+      </button>
+
+      <!-- Skill area links -->
+      <div class="pt-3 pb-1 px-3">
+        <div class="text-xs font-semibold text-zinc-600 uppercase tracking-widest">Habilidades</div>
+      </div>
+
+      <button onclick="filterBySkill('grammar')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-left text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100">
+        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0"></span>
+        Grammar
+      </button>
+      <button onclick="filterBySkill('listening')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-left text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100">
+        <span class="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0"></span>
+        Listening
+      </button>
+      <button onclick="filterBySkill('speaking')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-left text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0"></span>
+        Speaking
+      </button>
+      <button onclick="filterBySkill('writing')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-left text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100">
+        <span class="w-1.5 h-1.5 rounded-full bg-rose-400 flex-shrink-0"></span>
+        Writing
+      </button>
+      <button onclick="filterBySkill('reading')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-left text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100">
+        <span class="w-1.5 h-1.5 rounded-full bg-sky-400 flex-shrink-0"></span>
+        Reading
+      </button>
+      <button onclick="filterBySkill('pronunciation')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-left text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100">
+        <span class="w-1.5 h-1.5 rounded-full bg-violet-400 flex-shrink-0"></span>
+        Pronunciation
+      </button>
+    </nav>
+
+    <!-- Bottom -->
+    <div class="p-2 border-t border-zinc-800 space-y-0.5">
+      <!-- Theme toggle -->
+      <button
+        data-theme-toggle
+        onclick="Theme.toggle()"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 transition-all duration-150"
+        aria-label="Alternar tema">
+        <span data-theme-icon class="text-base w-5">☀️</span>
+        <span data-theme-label>Modo Claro</span>
+      </button>
+
+      <!-- Teacher access -->
+      <a href="teacher.html"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 transition-all duration-150">
+        <span class="text-base w-5">🔐</span>
+        <span>Área do Professor</span>
+      </a>
+
+      <!-- Logout -->
+      <button onclick="handleLogout()"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 hover:text-red-400 transition-all duration-150"
+        aria-label="Sair da conta">
+        <span class="text-base w-5">🚪</span>
+        <span>Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════════════════════════
+       MAIN AREA
+  ══════════════════════════════════════════════════════════ -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- ── TOPBAR ──────────────────────────────────────────── -->
+    <header class="flex items-center justify-between h-14 px-5 bg-zinc-900 border-b border-zinc-800 flex-shrink-0">
+
+      <!-- Left: Week pill + progress -->
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 bg-blue-600/15 border border-blue-600/25 rounded-full px-3 py-1">
+          <div class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+          <span id="week-pill" class="text-xs font-semibold text-blue-400">Semana 1 / 52</span>
+        </div>
+
+        <div class="flex items-center gap-2 text-sm text-zinc-400">
+          <div class="w-20 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+            <div id="week-progress-bar" class="h-full bg-blue-500 rounded-full transition-all duration-500" style="width:0%"></div>
+          </div>
+          <span id="week-progress-text" class="text-xs">0/5 atividades</span>
+        </div>
+      </div>
+
+      <!-- Right: Streak + theme toggle + avatar -->
+      <div class="flex items-center gap-4">
+
+        <!-- Streak -->
+        <div class="flex items-center gap-1.5 bg-zinc-800/80 rounded-lg px-3 py-1.5" title="Sequência de estudos">
+          <span class="text-orange-400 text-base">🔥</span>
+          <span id="streak-count" class="text-sm font-bold text-zinc-100">0</span>
+          <span class="text-xs text-zinc-500">dias</span>
+        </div>
+
+        <!-- Theme toggle (topbar) -->
+        <button
+          data-theme-toggle
+          onclick="Theme.toggle()"
+          class="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-zinc-100 transition-colors"
+          aria-label="Alternar tema">
+          <span data-theme-icon class="text-base">☀️</span>
+        </button>
+
+        <!-- User avatar -->
+        <div class="relative group cursor-pointer">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-sm font-bold text-white select-none"
+            data-user-initial aria-label="Avatar">A</div>
+          <div class="absolute right-0 top-full mt-1 w-36 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl py-1 hidden group-hover:block z-50">
+            <div class="px-3 py-1.5 text-xs text-zinc-400 border-b border-zinc-800 font-medium truncate" data-user-name></div>
+            <button onclick="handleLogout()" class="w-full text-left px-3 py-2 text-sm text-zinc-300 hover:text-red-400 hover:bg-zinc-800 transition-colors">
+              🚪 Sair
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── SCROLLABLE CONTENT ──────────────────────────────── -->
+    <main class="flex-1 overflow-y-auto" role="main">
+
+      <!-- ══ SECTION: HOME ══════════════════════════════════ -->
+      <div id="section-home" class="p-6 space-y-8 animate-fade-in">
+
+        <!-- Greeting -->
+        <div>
+          <h1 class="text-2xl font-bold text-zinc-100 leading-tight">
+            Bom estudo, <span data-user-name class="text-blue-400">Aluno</span>! 👋
+          </h1>
+          <p class="text-sm text-zinc-500 mt-1" id="week-theme-text">Carregando programa...</p>
+        </div>
+
+        <!-- Today's Tasks -->
+        <section>
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-base font-semibold text-zinc-200">Atividades de Hoje</h2>
+              <p class="text-xs text-zinc-500 mt-0.5">Complete todas as 5 para avançar de semana</p>
+            </div>
+            <span class="text-xs text-zinc-500" id="today-date"></span>
+          </div>
+
+          <div id="todays-tasks" class="space-y-2.5">
+            <!-- Rendered by dashboard.js -->
+            <div class="text-zinc-500 text-sm py-8 text-center">Carregando atividades...</div>
+          </div>
+        </section>
+
+        <!-- Streak card -->
+        <section>
+          <h2 class="text-base font-semibold text-zinc-200 mb-3">Sequência de Estudos</h2>
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <div class="flex items-center gap-5">
+              <div class="flex flex-col items-center">
+                <div class="text-3xl font-black text-orange-400" id="streak-count-display">
+                  <span id="streak-count-big">0</span>
+                </div>
+                <div class="text-xs text-zinc-500 mt-0.5">dias seguidos</div>
+              </div>
+              <div class="flex-1">
+                <div id="streak-message" class="text-sm text-zinc-300 mb-2">⚡ Estude hoje para começar sua sequência!</div>
+                <div id="streak-longest" class="text-xs text-zinc-500">Recorde: 0 dias</div>
+              </div>
+              <div class="text-4xl">🔥</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Progress overview (compact) -->
+        <section>
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-base font-semibold text-zinc-200">Domínio por Habilidade</h2>
+            <button onclick="showSection('progress')" class="text-xs text-blue-400 hover:text-blue-300 transition-colors">
+              Ver detalhes →
+            </button>
+          </div>
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+            <div id="skill-rings" class="grid grid-cols-6 gap-3">
+              <!-- Rendered by dashboard.js -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ══ SECTION: PROGRAM ════════════════════════════════ -->
+      <div id="section-program" class="hidden p-6 animate-fade-in">
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold text-zinc-100">Programa de 52 Semanas</h1>
+          <p class="text-sm text-zinc-500 mt-1">Clique em qualquer semana para acessar suas atividades</p>
+        </div>
+
+        <!-- Level legend -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="text-xs px-2 py-1 rounded-full border bg-emerald-500/15 text-emerald-400 border-emerald-500/25">Iniciante (1–4)</span>
+          <span class="text-xs px-2 py-1 rounded-full border bg-blue-500/15 text-blue-400 border-blue-500/25">Básico (5–12)</span>
+          <span class="text-xs px-2 py-1 rounded-full border bg-violet-500/15 text-violet-400 border-violet-500/25">Pré-Intermediário (13–26)</span>
+          <span class="text-xs px-2 py-1 rounded-full border bg-amber-500/15 text-amber-400 border-amber-500/25">Intermediário (27–40)</span>
+          <span class="text-xs px-2 py-1 rounded-full border bg-rose-500/15 text-rose-400 border-rose-500/25">Avançado (41–52)</span>
+        </div>
+
+        <div id="program-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          <!-- Rendered by dashboard.js -->
+        </div>
+      </div>
+
+      <!-- ══ SECTION: PROGRESS ═══════════════════════════════ -->
+      <div id="section-progress" class="hidden p-6 animate-fade-in">
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold text-zinc-100">Seu Progresso</h1>
+          <p class="text-sm text-zinc-500 mt-1">Histórico de estudos e domínio por habilidade</p>
+        </div>
+
+        <!-- Heatmap -->
+        <section class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-sm font-semibold text-zinc-300">Histórico de Estudos</h2>
+              <p class="text-xs text-zinc-500 mt-0.5">Atividades completadas por dia</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-zinc-500">
+              <span>Menos</span>
+              <div class="flex gap-0.5">
+                <div class="w-3 h-3 rounded-sm" style="background:#27272A"></div>
+                <div class="w-3 h-3 rounded-sm" style="background:#1E3A5F"></div>
+                <div class="w-3 h-3 rounded-sm" style="background:#1D4ED8"></div>
+                <div class="w-3 h-3 rounded-sm" style="background:#2563EB"></div>
+                <div class="w-3 h-3 rounded-sm" style="background:#3B82F6"></div>
+              </div>
+              <span>Mais</span>
+            </div>
+          </div>
+          <div id="heatmap-grid" class="overflow-x-auto pb-2">
+            <!-- Rendered by dashboard.js -->
+          </div>
+        </section>
+
+        <!-- Skill progress rings (large) -->
+        <section class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-6">
+          <h2 class="text-sm font-semibold text-zinc-300 mb-5">Domínio por Habilidade</h2>
+          <div id="skill-rings-large" class="grid grid-cols-3 md:grid-cols-6 gap-6">
+            <!-- Rendered separately -->
+          </div>
+        </section>
+
+        <!-- Course stats -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-blue-400" id="stat-activities-done">0</div>
+            <div class="text-xs text-zinc-500 mt-1">Atividades Concluídas</div>
+          </div>
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-emerald-400" id="stat-weeks-done">0</div>
+            <div class="text-xs text-zinc-500 mt-1">Semanas Completadas</div>
+          </div>
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-orange-400" id="stat-streak-best">0</div>
+            <div class="text-xs text-zinc-500 mt-1">Melhor Sequência (dias)</div>
+          </div>
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-violet-400" id="stat-days-studied">0</div>
+            <div class="text-xs text-zinc-500 mt-1">Dias de Estudo</div>
+          </div>
+        </section>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ACTIVITY MODAL
+  ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="overlay-activity-modal" role="dialog" aria-modal="true" aria-labelledby="modal-activity-title">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
+
+      <!-- Modal header -->
+      <div class="flex items-center justify-between p-5 border-b border-zinc-800">
+        <div class="flex items-center gap-3">
+          <span id="modal-skill-icon" class="text-2xl">📖</span>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="modal-skill-label" class="text-xs font-bold text-blue-400 uppercase tracking-wider">Grammar</span>
+              <span class="text-xs text-zinc-600">·</span>
+              <span id="modal-activity-week" class="text-xs text-zinc-500">Semana 1 · Atividade 1/5</span>
+              <span class="text-xs text-zinc-600">·</span>
+              <span id="modal-activity-time" class="text-xs text-zinc-500">15 min</span>
+            </div>
+            <h2 id="modal-activity-title" class="text-base font-bold text-zinc-100 mt-0.5">Título da Atividade</h2>
+          </div>
+        </div>
+        <button onclick="closeActivityModal()"
+          class="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-zinc-100 transition-colors flex-shrink-0"
+          aria-label="Fechar">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="flex-1 overflow-y-auto p-5">
+        <!-- Activity content -->
+        <div id="modal-activity-content"
+          class="prose prose-sm prose-invert max-w-none text-zinc-300 leading-relaxed mb-5">
+        </div>
+
+        <!-- Speaking section -->
+        <div id="modal-speak-section" class="mt-4 p-4 bg-zinc-800/50 rounded-xl border border-zinc-700/50">
+          <h3 class="text-sm font-semibold text-zinc-300 mb-3 flex items-center gap-2">
+            <span>🎙️</span> Gravação de Áudio
+          </h3>
+          <div class="flex items-center gap-4">
+            <button id="record-btn" class="record-btn" onclick="toggleRecording()" aria-label="Gravar/Parar">🎙️</button>
+            <div class="flex-1">
+              <div id="record-status" class="text-sm text-zinc-400">Clique no microfone para gravar sua resposta</div>
+              <div id="record-timer" class="text-xs text-zinc-500 mt-1"></div>
+            </div>
+          </div>
+          <audio id="recording-playback" class="mt-3 w-full" controls style="display:none;"></audio>
+          <p class="text-xs text-zinc-600 mt-2">⚠️ Requer HTTPS ou localhost para acesso ao microfone</p>
+        </div>
+
+        <!-- Writing section -->
+        <div id="modal-write-section" class="mt-4">
+          <label class="text-sm font-semibold text-zinc-300 mb-2 flex items-center gap-2" for="writing-response">
+            <span>✍️</span> Sua Resposta
+          </label>
+          <textarea
+            id="writing-response"
+            class="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-xl p-4 text-sm text-zinc-200 placeholder-zinc-600 resize-none focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all"
+            rows="6"
+            placeholder="Escreva sua resposta em inglês aqui..."
+          ></textarea>
+          <div class="flex justify-between text-xs text-zinc-500 mt-1">
+            <span>Tente escrever pelo menos 80 palavras</span>
+            <span id="word-count">0 palavras</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="flex items-center justify-between p-4 border-t border-zinc-800">
+        <button onclick="closeActivityModal()"
+          class="px-4 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors">
+          Fechar
+        </button>
+        <button id="modal-complete-btn"
+          class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-all duration-150 active:scale-95">
+          ✓ Marcar como Concluída
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ WEEK COMPLETE TOAST ══════════════════════════════════ -->
+  <div id="week-complete-toast"
+    class="hidden opacity-0 bg-emerald-600 text-white text-sm font-semibold px-5 py-3 rounded-full shadow-xl z-50">
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════════════════════ -->
+  <script src="js/theme.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/curriculum.js"></script>
+  <script src="js/dashboard.js"></script>
+
+  <script>
+    // ── Init ─────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      Theme.init();
+      initDashboard();
+
+      // Set date display
+      const dateEl = document.getElementById('today-date');
+      if (dateEl) {
+        dateEl.textContent = new Date().toLocaleDateString('pt-BR', {
+          weekday:'long', day:'numeric', month:'long'
+        });
+      }
+
+      // Writing word counter
+      const writingTA = document.getElementById('writing-response');
+      const wordCountEl = document.getElementById('word-count');
+      if (writingTA && wordCountEl) {
+        writingTA.addEventListener('input', () => {
+          const words = writingTA.value.trim().split(/\s+/).filter(Boolean).length;
+          wordCountEl.textContent = `${words} palavra${words !== 1 ? 's' : ''}`;
+        });
+      }
+
+      // Streak display sync
+      const student = Auth.getCurrentStudent();
+      if (student) {
+        const bigCount = document.getElementById('streak-count-big');
+        if (bigCount) bigCount.textContent = student.progress?.streak?.current || 0;
+
+        // Progress section stats
+        const completed = student.progress?.completedActivities || [];
+        const daysStudied = Object.keys(student.progress?.studyLog || {}).length;
+        const weeksCompleted = Math.max(0, (student.currentWeek || 1) - 1);
+
+        const safeSet = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        safeSet('stat-activities-done', completed.length);
+        safeSet('stat-weeks-done', weeksCompleted);
+        safeSet('stat-streak-best', student.progress?.streak?.longest || 0);
+        safeSet('stat-days-studied', daysStudied);
+
+        // Large skill rings (progress section)
+        renderLargeRings(student);
+      }
+    });
+
+    function renderLargeRings(student) {
+      const container = document.getElementById('skill-rings-large');
+      if (!container) return;
+
+      const SKILL_META_LOCAL = {
+        grammar:       { label:'Grammar',       icon:'📖', color:'#818CF8' },
+        listening:     { label:'Listening',     icon:'🎧', color:'#2DD4BF' },
+        speaking:      { label:'Speaking',      icon:'🗣️', color:'#FBBF24' },
+        writing:       { label:'Writing',       icon:'✍️', color:'#FB7185' },
+        reading:       { label:'Reading',       icon:'👁️', color:'#38BDF8' },
+        pronunciation: { label:'Pronunciation', icon:'🔊', color:'#C084FC' },
+      };
+
+      const masteries = Auth.getSkillMasteries(student, CURRICULUM);
+
+      container.innerHTML = Object.entries(SKILL_META_LOCAL).map(([skill, m]) => {
+        const pct  = masteries[skill] || 0;
+        const r    = 36;
+        const circ = 2 * Math.PI * r;
+        const dash = (pct / 100) * circ;
+        const gap  = circ - dash;
+
+        return `
+          <div class="flex flex-col items-center gap-3">
+            <div class="relative w-20 h-20">
+              <svg viewBox="0 0 80 80" class="w-full h-full -rotate-90">
+                <circle cx="40" cy="40" r="${r}" fill="none" stroke="#27272A" stroke-width="6"/>
+                <circle cx="40" cy="40" r="${r}" fill="none"
+                  stroke="${m.color}" stroke-width="6"
+                  stroke-linecap="round"
+                  stroke-dasharray="${dash.toFixed(1)} ${gap.toFixed(1)}"
+                  style="transition: stroke-dasharray 1s ease-out;"/>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-xl">${m.icon}</span>
+                <span class="text-xs font-bold text-zinc-200">${pct}%</span>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="text-xs font-semibold text-zinc-300">${m.label}</div>
+              <div class="text-xs text-zinc-500">
+                ${Math.round(pct / 10 * (skill==='writing'||skill==='pronunciation'?26:52))} / ${skill==='writing'||skill==='pronunciation'?26:52}
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ── Auth ─────────────────────────────────────────────────
+    function handleLogout() {
+      Auth.logout();
+      window.location.href = 'index.html';
+    }
+
+    // ── Skill filter ─────────────────────────────────────────
+    function filterBySkill(skill) {
+      showSection('program');
+      setTimeout(() => {
+        // Scroll to first card of that skill
+        const student = Auth.getCurrentStudent();
+        const firstWeek = CURRICULUM.find(w => w.activities.some(a => a.skill === skill));
+        if (firstWeek) {
+          const btn = document.querySelector(`[onclick="openWeekDetail(${firstWeek.week})"]`);
+          if (btn) btn.scrollIntoView({ behavior:'smooth', block:'center' });
+        }
+      }, 100);
+    }
+
+    // ── Recording ─────────────────────────────────────────────
+    let mediaRecorder = null;
+    let recordingChunks = [];
+    let recordTimer = null;
+    let recordSeconds = 0;
+
+    async function toggleRecording() {
+      const btn    = document.getElementById('record-btn');
+      const status = document.getElementById('record-status');
+      const timer  = document.getElementById('record-timer');
+
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        // Stop
+        mediaRecorder.stop();
+        btn.classList.remove('recording');
+        btn.textContent = '🎙️';
+        clearInterval(recordTimer);
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        recordingChunks = [];
+        recordSeconds = 0;
+
+        mediaRecorder.ondataavailable = e => recordingChunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(recordingChunks, { type: 'audio/webm' });
+          const url  = URL.createObjectURL(blob);
+          const audio = document.getElementById('recording-playback');
+          if (audio) { audio.src = url; audio.style.display = 'block'; }
+          if (status) status.textContent = 'Gravação concluída. Ouça e avalie sua pronúncia!';
+          stream.getTracks().forEach(t => t.stop());
+        };
+
+        mediaRecorder.start();
+        btn.classList.add('recording');
+        btn.textContent = '⏹️';
+        if (status) status.textContent = 'Gravando... Fale claramente!';
+
+        recordTimer = setInterval(() => {
+          recordSeconds++;
+          if (timer) timer.textContent = `${Math.floor(recordSeconds/60)}:${String(recordSeconds%60).padStart(2,'0')}`;
+        }, 1000);
+
+      } catch (err) {
+        if (status) status.textContent = '❌ Microfone não disponível. Use localhost ou HTTPS.';
+      }
+    }
+
+    // ── Escape key closes modal ───────────────────────────────
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeActivityModal();
+    });
+    document.getElementById('overlay-activity-modal')?.addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeActivityModal();
+    });
+  </script>
+</body>
+</html>

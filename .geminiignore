@@ -1,0 +1,68 @@
+# 1. Dependências
+node_modules/
+vendor/
+venv/
+.venv/
+env/
+.env
+poetry.lock
+Pipfile.lock
+package-lock.json
+yarn.lock
+
+# 2. Builds e Compilados
+dist/
+build/
+out/
+.next/
+.nuxt/
+.svelte-kit/
+*.min.js
+*.min.css
+*.class
+*.o
+*.pyc
+__pycache__/
+
+# 3. Mídia e Assets Binários
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.ico
+*.svg
+*.webp
+*.mp4
+*.mp3
+*.wav
+*.ttf
+*.otf
+*.woff
+*.woff2
+*.eot
+*.pdf
+
+# 4. Logs, Caches e Bancos de Dados
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.cache/
+tmp/
+temp/
+*.sqlite
+*.sqlite3
+*.db
+
+# 5. Configurações de Sistema e IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+
+# 6. Controle de Versão (Fundamental!)
+.git/
+.svn/

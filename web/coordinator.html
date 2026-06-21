@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>Coordinator Portal — English Mastery</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { zinc: { 950: '#09090B' } }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen">
+  <!-- Password Gate -->
+  <div id="password-gate" class="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950 px-4">
+    <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl shadow-xl w-full max-w-sm">
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-3">🛡️</div>
+        <h2 class="text-xl font-bold">Coordinator Access</h2>
+        <p class="text-sm text-zinc-400">Please log in to manage platform settings.</p>
+      </div>
+      <form id="coord-login-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 mb-1">Username</label>
+          <input type="text" id="coord-username" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" required>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 mb-1">Password</label>
+          <input type="password" id="coord-password" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" required>
+        </div>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 rounded-lg transition-colors">
+          Access
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard wrapper -->
+  <div id="dashboard-wrapper" class="hidden flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 border-r border-zinc-800 bg-zinc-900 flex flex-col">
+      <div class="h-16 flex items-center px-6 border-b border-zinc-800">
+        <span class="font-bold text-lg tracking-tight text-blue-400 flex items-center gap-2">
+          <span>🎓</span> Coordinator Panel
+        </span>
+      </div>
+      <nav class="flex-1 p-4 space-y-1">
+        <button onclick="switchTab('users')" id="nav-users" class="w-full text-left px-3 py-2.5 rounded-lg bg-blue-600/10 text-blue-400 font-medium flex items-center gap-2">
+          <span>👥</span> Users & Roles
+        </button>
+        <button onclick="switchTab('classes-programs')" id="nav-classes-programs" class="w-full text-left px-3 py-2.5 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 font-medium flex items-center gap-2">
+          <span>📅</span> Classes & Programs
+        </button>
+        <button onclick="switchTab('board-logs')" id="nav-board-logs" class="w-full text-left px-3 py-2.5 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 font-medium flex items-center gap-2">
+          <span>📝</span> Board Logs
+        </button>
+      </nav>
+      <div class="p-4 border-t border-zinc-800">
+        <button onclick="logout()" class="w-full px-3 py-2 text-left text-sm text-rose-400 hover:bg-rose-500/10 rounded-lg">
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden">
+      <!-- Section: Users -->
+      <section id="sect-users" class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 border-b border-zinc-800 flex items-center px-8 shrink-0 bg-zinc-900/50">
+          <h1 class="font-bold text-xl">User Management</h1>
+        </header>
+        <div class="flex-1 overflow-auto p-8">
+          <div class="max-w-4xl space-y-8">
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                <span>➕</span> Create Staff Account
+              </h2>
+              <form id="create-user-form" class="grid grid-cols-2 gap-4">
+                <div class="col-span-2">
+                  <label class="block text-xs text-zinc-400 mb-1">Full Name</label>
+                  <input type="text" id="new-name" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100" required>
+                </div>
+                <div>
+                  <label class="block text-xs text-zinc-400 mb-1">Username</label>
+                  <input type="text" id="new-username" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100" required>
+                </div>
+                <div>
+                  <label class="block text-xs text-zinc-400 mb-1">Password</label>
+                  <input type="password" id="new-password" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100" required>
+                </div>
+                <div class="col-span-2">
+                  <label class="block text-xs text-zinc-400 mb-1">Role</label>
+                  <select id="new-role" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100">
+                    <option value="teacher">Teacher</option>
+                    <option value="coordinator">Coordinator</option>
+                  </select>
+                </div>
+                <div class="col-span-2 mt-2">
+                  <button type="submit" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg font-semibold text-sm transition-colors text-white">
+                    Create Account
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div>
+              <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                <span>📋</span> All Registered Users
+              </h2>
+              <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                <table class="w-full text-left text-sm">
+                  <thead class="bg-zinc-950 border-b border-zinc-800 text-zinc-400 uppercase text-xs">
+                    <tr>
+                      <th class="px-6 py-3 font-medium">Name</th>
+                      <th class="px-6 py-3 font-medium">Username</th>
+                      <th class="px-6 py-3 font-medium">Role</th>
+                      <th class="px-6 py-3 font-medium">Teacher Assignment</th>
+                      <th class="px-6 py-3 font-medium">Class Group</th>
+                    </tr>
+                  </thead>
+                  <tbody id="users-list" class="divide-y divide-zinc-800">
+                    <!-- Loaded dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Classes & Programs -->
+      <section id="sect-classes-programs" class="flex-1 flex flex-col overflow-hidden hidden">
+        <header class="h-16 border-b border-zinc-800 flex items-center px-8 shrink-0 bg-zinc-900/50">
+          <h1 class="font-bold text-xl">Classes & Programs Manager</h1>
+        </header>
+        <div class="flex-1 overflow-auto p-8">
+          <div class="max-w-4xl space-y-8">
+            <!-- Classes Manager Card -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h2 class="text-lg font-semibold mb-4">🏫 Manage Classes (Class Groups)</h2>
+              <form id="create-class-form" class="grid grid-cols-3 gap-4 mb-6">
+                <div>
+                  <label class="block text-xs text-zinc-400 mb-1">Class Code</label>
+                  <input type="text" id="class-code" placeholder="e.g. TURMA2026" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100" required>
+                </div>
+                <div>
+                  <label class="block text-xs text-zinc-400 mb-1">Class Name</label>
+                  <input type="text" id="class-name" placeholder="e.g. Advanced English" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100" required>
+                </div>
+                <div>
+                  <label class="block text-xs text-zinc-400 mb-1">Assign Teacher</label>
+                  <select id="class-teacher" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100">
+                    <option value="">No Teacher</option>
+                  </select>
+                </div>
+                <div class="col-span-3 flex justify-end">
+                  <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors">
+                    Add Class
+                  </button>
+                </div>
+              </form>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border border-zinc-800 rounded-lg">
+                  <thead class="bg-zinc-950 text-zinc-400 border-b border-zinc-800 uppercase">
+                    <tr>
+                      <th class="px-4 py-2">Code</th>
+                      <th class="px-4 py-2">Name</th>
+                      <th class="px-4 py-2">Teacher</th>
+                      <th class="px-4 py-2 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="classes-table-body" class="divide-y divide-zinc-800">
+                    <!-- Load Classes dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Programs Manager Card -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h2 class="text-lg font-semibold mb-4">📚 Manage Programs / Courses</h2>
+              <form id="create-program-form" class="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-xs text-zinc-400 mb-1">Program Name</label>
+                  <input type="text" id="prog-name" placeholder="e.g. 52-Week Program" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100" required>
+                </div>
+                <div>
+                  <label class="block text-xs text-zinc-400 mb-1">Level</label>
+                  <select id="prog-level" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100">
+                    <option value="Beginner">Beginner</option>
+                    <option value="Elementary">Elementary</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                  </select>
+                </div>
+                <div class="col-span-2">
+                  <label class="block text-xs text-zinc-400 mb-1">Description</label>
+                  <textarea id="prog-desc" placeholder="Brief outline of course contents..." class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100" rows="3"></textarea>
+                </div>
+                <div class="col-span-2 flex justify-end">
+                  <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors">
+                    Add Program
+                  </button>
+                </div>
+              </form>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border border-zinc-800 rounded-lg">
+                  <thead class="bg-zinc-950 text-zinc-400 border-b border-zinc-800 uppercase">
+                    <tr>
+                      <th class="px-4 py-2">Name</th>
+                      <th class="px-4 py-2">Level</th>
+                      <th class="px-4 py-2">Description</th>
+                      <th class="px-4 py-2 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="programs-table-body" class="divide-y divide-zinc-800">
+                    <!-- Load programs dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Board Logs -->
+      <section id="sect-board-logs" class="flex-1 flex flex-col overflow-hidden hidden">
+        <header class="h-16 border-b border-zinc-800 flex items-center px-8 shrink-0 bg-zinc-900/50">
+          <h1 class="font-bold text-xl">Student Board Logs</h1>
+        </header>
+        <div class="flex-1 overflow-auto p-8">
+          <div class="max-w-4xl grid grid-cols-3 gap-6">
+            <!-- Left col: Students List -->
+            <div class="col-span-1 bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex flex-col h-[500px]">
+              <h2 class="text-sm font-semibold mb-3 text-zinc-400">Select Student</h2>
+              <div class="flex-1 overflow-y-auto space-y-1" id="board-logs-student-list">
+                <!-- Loaded dynamically -->
+              </div>
+            </div>
+            <!-- Right col: Logs View -->
+            <div class="col-span-2 bg-zinc-900 border border-zinc-800 rounded-xl p-6 flex flex-col h-[500px]">
+              <h2 class="text-base font-bold mb-4 flex items-center gap-2 border-b border-zinc-800 pb-2">
+                <span>📓</span> <span id="log-view-title">Diary Board Log</span>
+              </h2>
+              <div class="flex-1 overflow-y-auto space-y-4 pr-2" id="log-entries-container">
+                <div class="text-zinc-500 text-sm text-center py-12">Select a student from the list to view their board log.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    const API_URL = 'http://localhost:8080/api';
+    let teachers = [];
+    let classes = [];
+    let students = [];
+    let selectedStudentIdForLogs = null;
+
+    // Login submit
+    document.getElementById('coord-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const user = document.getElementById('coord-username').value;
+      const pass = document.getElementById('coord-password').value;
+      try {
+        const authData = await Auth.login({ username: user, password: pass });
+        if (authData.role !== 'coordinator') {
+          alert("Access denied. Not a coordinator.");
+          Auth.logout();
+        } else {
+          showDash();
+        }
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    // Sidebar tab routing
+    function switchTab(tab) {
+      // Manage nav classes
+      document.getElementById('nav-users').className = tab === 'users' 
+        ? 'w-full text-left px-3 py-2.5 rounded-lg bg-blue-600/10 text-blue-400 font-medium flex items-center gap-2'
+        : 'w-full text-left px-3 py-2.5 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 font-medium flex items-center gap-2';
+
+      document.getElementById('nav-classes-programs').className = tab === 'classes-programs'
+        ? 'w-full text-left px-3 py-2.5 rounded-lg bg-blue-600/10 text-blue-400 font-medium flex items-center gap-2'
+        : 'w-full text-left px-3 py-2.5 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 font-medium flex items-center gap-2';
+
+      document.getElementById('nav-board-logs').className = tab === 'board-logs'
+        ? 'w-full text-left px-3 py-2.5 rounded-lg bg-blue-600/10 text-blue-400 font-medium flex items-center gap-2'
+        : 'w-full text-left px-3 py-2.5 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 font-medium flex items-center gap-2';
+
+      // Toggle sections
+      document.getElementById('sect-users').classList.toggle('hidden', tab !== 'users');
+      document.getElementById('sect-classes-programs').classList.toggle('hidden', tab !== 'classes-programs');
+      document.getElementById('sect-board-logs').classList.toggle('hidden', tab !== 'board-logs');
+
+      if (tab === 'classes-programs') {
+        loadClasses();
+        loadPrograms();
+      } else if (tab === 'board-logs') {
+        loadStudentsList();
+      }
+    }
+
+    // Dashboard initialization
+    async function showDash() {
+      document.getElementById('password-gate').style.display = 'none';
+      document.getElementById('dashboard-wrapper').classList.remove('hidden');
+      
+      // Load foundational lists
+      await loadTeachers();
+      await loadClassesListOnly();
+      loadUsers();
+    }
+
+    // Fetch lists
+    async function loadTeachers() {
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/users/teachers`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        teachers = await res.json();
+        const dropHtml = teachers.map(t => `<option value="${t.id}">${t.full_name}</option>`).join('');
+        document.getElementById('class-teacher').innerHTML = `<option value="">No Teacher</option>` + dropHtml;
+      }
+    }
+
+    async function loadClassesListOnly() {
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/classes/`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        classes = await res.json();
+      }
+    }
+
+    async function loadUsers() {
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/users/`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const users = await res.json();
+        
+        document.getElementById('users-list').innerHTML = users.map(u => {
+          const isStudent = u.role === 'student';
+          
+          // Dropdowns for student row
+          let teacherDrop = '';
+          let classDrop = '';
+          
+          if (isStudent) {
+            const currentTeacherId = u.student_profile?.teacher_id || '';
+            const currentClassId = u.student_profile?.class_id || '';
+            
+            teacherDrop = `
+              <select onchange="assignTeacher('${u.id}', this.value)" class="bg-zinc-950 text-xs border border-zinc-800 rounded px-2 py-1 focus:outline-none focus:border-blue-500 text-zinc-200">
+                <option value="none">No Teacher</option>
+                ${teachers.map(t => `<option value="${t.id}" ${t.id === currentTeacherId ? 'selected' : ''}>${t.full_name}</option>`).join('')}
+              </select>
+            `;
+
+            classDrop = `
+              <select onchange="assignClass('${u.id}', this.value)" class="bg-zinc-950 text-xs border border-zinc-800 rounded px-2 py-1 focus:outline-none focus:border-blue-500 text-zinc-200">
+                <option value="none">No Class</option>
+                ${classes.map(c => `<option value="${c.id}" ${c.id === currentClassId ? 'selected' : ''}>${c.name} (${c.code})</option>`).join('')}
+              </select>
+            `;
+          }
+
+          return `
+            <tr class="hover:bg-zinc-800/50">
+              <td class="px-6 py-4 font-medium">${u.full_name}</td>
+              <td class="px-6 py-4 text-zinc-400">@${u.username}</td>
+              <td class="px-6 py-4">
+                <span class="px-2 py-1 text-xs rounded-full border ${u.role === 'coordinator' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' : u.role === 'teacher' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}">
+                  ${u.role}
+                </span>
+              </td>
+              <td class="px-6 py-4">${isStudent ? teacherDrop : '<span class="text-zinc-600 text-xs">—</span>'}</td>
+              <td class="px-6 py-4">${isStudent ? classDrop : '<span class="text-zinc-600 text-xs">—</span>'}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    // Assignments
+    async function assignTeacher(studentId, teacherId) {
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/users/student/${studentId}/assign-teacher`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ teacher_id: teacherId })
+      });
+      if (res.ok) {
+        // Reload silently
+        loadUsers();
+      } else {
+        alert("Failed to assign teacher.");
+      }
+    }
+
+    async function assignClass(studentId, classId) {
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/users/student/${studentId}/assign-teacher`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ class_id: classId })
+      });
+      if (res.ok) {
+        loadUsers();
+      } else {
+        alert("Failed to assign class.");
+      }
+    }
+
+    // Classes CRUD
+    document.getElementById('create-class-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = document.getElementById('class-code').value;
+      const name = document.getElementById('class-name').value;
+      const teacher_id = document.getElementById('class-teacher').value || null;
+      
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/classes/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ code, name, teacher_id })
+      });
+      
+      if (res.ok) {
+        e.target.reset();
+        loadClasses();
+        loadClassesListOnly(); // sync cache
+      } else {
+        const err = await res.json();
+        alert(err.detail || "Failed to create class.");
+      }
+    });
+
+    async function loadClasses() {
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/classes/`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const classesList = await res.json();
+        document.getElementById('classes-table-body').innerHTML = classesList.map(c => {
+          let tName = "None";
+          const match = teachers.find(t => t.id === c.teacher_id);
+          if (match) tName = match.full_name;
+
+          return `
+            <tr>
+              <td class="px-4 py-2 font-semibold text-zinc-100">${c.code}</td>
+              <td class="px-4 py-2 text-zinc-300">${c.name}</td>
+              <td class="px-4 py-2 text-zinc-400">${tName}</td>
+              <td class="px-4 py-2 text-right">
+                <button onclick="deleteClass('${c.id}')" class="text-rose-400 hover:text-rose-300 font-medium">Delete</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    async function deleteClass(classId) {
+      if(!confirm("Are you sure you want to delete this class?")) return;
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/classes/${classId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        loadClasses();
+        loadClassesListOnly();
+      } else {
+        alert("Failed to delete class.");
+      }
+    }
+
+    // Programs (Courses) CRUD
+    document.getElementById('create-program-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('prog-name').value;
+      const level = document.getElementById('prog-level').value;
+      const description = document.getElementById('prog-desc').value;
+      
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/courses/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ name, level, description })
+      });
+      
+      if (res.ok) {
+        e.target.reset();
+        loadPrograms();
+      } else {
+        alert("Failed to create program.");
+      }
+    });
+
+    async function loadPrograms() {
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/courses/`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const programs = await res.json();
+        document.getElementById('programs-table-body').innerHTML = programs.map(p => `
+          <tr>
+            <td class="px-4 py-2 font-semibold text-zinc-100">${p.name}</td>
+            <td class="px-4 py-2 text-zinc-300">${p.level}</td>
+            <td class="px-4 py-2 text-zinc-400">${p.description || '—'}</td>
+            <td class="px-4 py-2 text-right">
+              <span class="text-zinc-600">Active</span>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // Board Logs
+    async function loadStudentsList() {
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/users/students`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        students = await res.json();
+        document.getElementById('board-logs-student-list').innerHTML = students.map(s => `
+          <button onclick="selectStudentForLogs('${s.id}', '${s.full_name}')" class="w-full text-left px-3 py-2 rounded-lg text-sm text-zinc-300 hover:bg-zinc-800 transition-colors flex items-center justify-between">
+            <span>${s.full_name}</span>
+            <span class="text-xs text-zinc-500">@${s.username}</span>
+          </button>
+        `).join('');
+      }
+    }
+
+    async function selectStudentForLogs(studentId, fullName) {
+      selectedStudentIdForLogs = studentId;
+      document.getElementById('log-view-title').textContent = `${fullName}'s Board Log`;
+      loadLogEntries(studentId);
+    }
+
+    async function loadLogEntries(studentId) {
+      const container = document.getElementById('log-entries-container');
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/board-logs/student/${studentId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const logs = await res.json();
+        if (logs.length === 0) {
+          container.innerHTML = `<div class="text-zinc-500 text-sm text-center py-12">No board log entries recorded for this student yet.</div>`;
+          return;
+        }
+        
+        container.innerHTML = logs.map(l => `
+          <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg space-y-2">
+            <div class="flex justify-between items-center text-xs text-zinc-500">
+              <span class="font-semibold text-blue-400">By Teacher</span>
+              <span>📅 ${new Date(l.created_at).toLocaleString('pt-BR')}</span>
+            </div>
+            <div class="text-sm text-zinc-200 whitespace-pre-wrap">${l.content}</div>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = `<div class="text-rose-400 text-sm text-center py-12">Failed to load log entries. Make sure you are authorized.</div>`;
+      }
+    }
+
+    // Staff Creation Form
+    document.getElementById('create-user-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        full_name: document.getElementById('new-name').value,
+        username: document.getElementById('new-username').value.trim().toLowerCase(),
+        password: document.getElementById('new-password').value,
+        role: document.getElementById('new-role').value
+      };
+      
+      const token = Auth.getToken();
+      const res = await fetch(`${API_URL}/users/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        alert("Account created successfully!");
+        e.target.reset();
+        loadUsers();
+      } else {
+        const err = await res.json();
+        alert(err.detail || "Username already taken.");
+      }
+    });
+
+    function logout() {
+      Auth.logout();
+      window.location.reload();
+    }
+
+    // Auto-login / check role
+    if (Auth.isLoggedIn()) {
+      const user = Auth.getCurrentUser();
+      if (user) {
+        if (user.role === 'coordinator') showDash();
+        else if (user.role === 'student') window.location.href = 'dashboard.html';
+        else if (user.role === 'teacher') window.location.href = 'teacher.html';
+      }
+    }
+  </script>
+</body>
+</html>

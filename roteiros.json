@@ -1,0 +1,530 @@
+[
+    {
+        "id_fonema": "short_i",
+        "simbolo_ipa": "/ɪ/",
+        "palavras_escolhidas": [
+            "system",
+            "business",
+            "limit",
+            "risk",
+            "build"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ɪ/. Pense nele como uma batida seca. Suas cordas vocais vibram. Relaxe completamente os lábios, sem sorrir. A língua fica no centro da boca. Solte o som curto e direto. Vamos praticar o shadowing: systembusinesslimitriskbuildExcelente."
+    },
+    {
+        "id_fonema": "short_e",
+        "simbolo_ipa": "/e/",
+        "palavras_escolhidas": [
+            "sell",
+            "debt",
+            "check",
+            "wealth",
+            "stress"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /e/. A glote vibra. Imagine que você está suspirando aliviado. Deixe o maxilar cair levemente, lábios relaxados e língua descansando na base da boca. Vamos praticar o shadowing: selldebtcheckwealthstressExcelente."
+    },
+    {
+        "id_fonema": "short_a",
+        "simbolo_ipa": "/æ/",
+        "palavras_escolhidas": [
+            "tax",
+            "brand",
+            "plan",
+            "asset",
+            "cash"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /æ/. Com a glote vibrando, abra bem a boca como se fosse morder uma maçã grande. A ponta da língua toca os dentes inferiores. Sinta a tensão nos lábios esticados. Vamos praticar o shadowing: taxbrandplanassetcashExcelente."
+    },
+    {
+        "id_fonema": "short_u",
+        "simbolo_ipa": "/ʌ/",
+        "palavras_escolhidas": [
+            "fund",
+            "trust",
+            "budget",
+            "month",
+            "result"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ʌ/. Pense em um soco de ar na barriga, rápido e grave. Cordas vocais vibrando, boca entreaberta de forma neutra, língua relaxada no fundo. Vamos praticar o shadowing: fundtrustbudgetmonthresultExcelente."
+    },
+    {
+        "id_fonema": "short_oo",
+        "simbolo_ipa": "/ʊ/",
+        "palavras_escolhidas": [
+            "book",
+            "good",
+            "push",
+            "full",
+            "look"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ʊ/. Glote vozeada. Projete os lábios um pouco para a frente, mas mantenha-os relaxados, como se fosse assobiar fracamente. A língua vai um pouco para trás. Vamos praticar o shadowing: bookgoodpushfulllookExcelente."
+    },
+    {
+        "id_fonema": "short_o",
+        "simbolo_ipa": "/ɒ/",
+        "palavras_escolhidas": [
+            "cost",
+            "stock",
+            "profit",
+            "contract",
+            "loss"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ɒ/. Glote vibra. Deixe o maxilar cair livremente, formando um círculo ovalado com os lábios. A língua abaixa totalmente, como quando o médico pede para dizer 'ah'. Vamos praticar o shadowing: coststockprofitcontractlossExcelente."
+    },
+    {
+        "id_fonema": "schwa",
+        "simbolo_ipa": "/ə/",
+        "palavras_escolhidas": [
+            "account",
+            "supply",
+            "budget",
+            "control",
+            "focus"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ə/, o Schwa. É o som da preguiça! Cordas vocais vibrando levemente. Lábios, maxilar e língua devem estar no estado de relaxamento absoluto. Faça um murmúrio fraco e curto. Vamos praticar o shadowing: accountsupplybudgetcontrolfocusExcelente."
+    },
+    {
+        "id_fonema": "long_i",
+        "simbolo_ipa": "/iː/",
+        "palavras_escolhidas": [
+            "team",
+            "deal",
+            "lead",
+            "fee",
+            "yield"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /iː/. Glote vibra. Dê um sorriso largo, sentindo a tensão nas bochechas. A língua sobe quase encostando no céu da boca. Alongue o som como um elástico esticando. Vamos praticar o shadowing: teamdealleadfeeyieldExcelente."
+    },
+    {
+        "id_fonema": "long_er",
+        "simbolo_ipa": "/ɜː/",
+        "palavras_escolhidas": [
+            "firm",
+            "work",
+            "term",
+            "earn",
+            "learn"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ɜː/. Glote vibra num tom longo e contínuo. Lábios semiabertos e firmes, língua plana suspensa no centro da boca, sem tocar nada. Sinta a ressonância constante. Vamos praticar o shadowing: firmworktermearnlearnExcelente."
+    },
+    {
+        "id_fonema": "long_ah",
+        "simbolo_ipa": "/ɑː/",
+        "palavras_escolhidas": [
+            "market",
+            "staff",
+            "charge",
+            "chart",
+            "target"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ɑː/. Vozeado. É um som aberto e profundo. Abra bem a mandíbula, relaxe os lábios. Puxe a língua para trás e abaixe-a. Sustente o som vindo direto da garganta. Vamos praticar o shadowing: marketstaffchargecharttargetExcelente."
+    },
+    {
+        "id_fonema": "long_aw",
+        "simbolo_ipa": "/ɔː/",
+        "palavras_escolhidas": [
+            "board",
+            "law",
+            "call",
+            "store",
+            "report"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ɔː/. Glote vibra. Faça um bico firme com os lábios, como um canudo oval. A base da língua recua e sobe levemente no fundo da garganta. O som é longo e projetado. Vamos praticar o shadowing: boardlawcallstorereportExcelente."
+    },
+    {
+        "id_fonema": "long_oo",
+        "simbolo_ipa": "/uː/",
+        "palavras_escolhidas": [
+            "rule",
+            "prove",
+            "group",
+            "tool",
+            "move"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /uː/. Cordas vocais vozeadas. Faça um bico bem fechado e tenso, como se fosse apagar uma vela de longe. A língua recua, subindo para o fundo. Alongue o fluxo vocal. Vamos praticar o shadowing: ruleprovegrouptoolmoveExcelente."
+    },
+    {
+        "id_fonema": "diph_ei",
+        "simbolo_ipa": "/eɪ/",
+        "palavras_escolhidas": [
+            "trade",
+            "rate",
+            "claim",
+            "state",
+            "pay"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o ditongo /eɪ/. Som vozeado contínuo. Comece com a boca relaxada e deslize rapidamente para um sorriso esticado. A língua sobe acompanhando o movimento para criar esse deslizamento. Vamos praticar o shadowing: traderateclaimstatepayExcelente."
+    },
+    {
+        "id_fonema": "diph_ai",
+        "simbolo_ipa": "/aɪ/",
+        "palavras_escolhidas": [
+            "price",
+            "time",
+            "client",
+            "sign",
+            "guide"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o ditongo /aɪ/. Glote vibrante. Abra a mandíbula amplamente com a língua baixa, e então puxe a mandíbula para cima em direção a um sorriso estreito. Sinta o movimento elástico. Vamos praticar o shadowing: pricetimeclientsignguideExcelente."
+    },
+    {
+        "id_fonema": "diph_oi",
+        "simbolo_ipa": "/ɔɪ/",
+        "palavras_escolhidas": [
+            "point",
+            "choice",
+            "coin",
+            "voice",
+            "join"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o ditongo /ɔɪ/. Som vozeado. Inicie com os lábios arredondados em formato de 'O' e deslize dinamicamente para um sorriso frouxo, levando a língua do fundo para a frente. Vamos praticar o shadowing: pointchoicecoinvoicejoinExcelente."
+    },
+    {
+        "id_fonema": "diph_au",
+        "simbolo_ipa": "/aʊ/",
+        "palavras_escolhidas": [
+            "down",
+            "out",
+            "count",
+            "amount",
+            "bound"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o ditongo /aʊ/. Voz ativada. Abra bem a boca primeiro, abaixando a língua, depois junte os lábios formando um bico pequeno e tenso. O movimento é como um fecho apertando. Vamos praticar o shadowing: downoutcountamountboundExcelente."
+    },
+    {
+        "id_fonema": "diph_ou",
+        "simbolo_ipa": "/əʊ/",
+        "palavras_escolhidas": [
+            "growth",
+            "loan",
+            "goal",
+            "quote",
+            "flow"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o ditongo /əʊ/. Glote vibrante. Comece com a boca quase relaxada e a língua no meio, fechando progressivamente os lábios até fazer um bico suave, deslizando o ar. Vamos praticar o shadowing: growthloangoalquoteflowExcelente."
+    },
+    {
+        "id_fonema": "diph_ia",
+        "simbolo_ipa": "/ɪə/",
+        "palavras_escolhidas": [
+            "clear",
+            "tier",
+            "career",
+            "near",
+            "gear"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o ditongo /ɪə/. Voz ativada. Inicie com um meio sorriso e relaxe de repente a mandíbula e os lábios, levando a língua para a posição neutra do Schwa. Deslizamento interno e suave. Vamos praticar o shadowing: cleartiercareerneargearExcelente."
+    },
+    {
+        "id_fonema": "diph_ea",
+        "simbolo_ipa": "/eə/",
+        "palavras_escolhidas": [
+            "share",
+            "care",
+            "fair",
+            "chair",
+            "where"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o ditongo /eə/. Cordas vocais em ação. Abra os lábios em um sorriso descontraído, solte a boca relaxando a língua de volta para o centro neutro. Uma ponte sonora. Vamos praticar o shadowing: sharecarefairchairwhereExcelente."
+    },
+    {
+        "id_fonema": "diph_ua",
+        "simbolo_ipa": "/ʊə/",
+        "palavras_escolhidas": [
+            "tour",
+            "pure",
+            "sure",
+            "cure",
+            "secure"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o ditongo /ʊə/. Glote vibrante. Comece fazendo um bico solto com os lábios projetados, e então relaxe tudo, deixando o som desmaiar para a base neutra da língua. Vamos praticar o shadowing: tourpuresurecuresecureExcelente."
+    },
+    {
+        "id_fonema": "cons_p",
+        "simbolo_ipa": "/p/",
+        "palavras_escolhidas": [
+            "price",
+            "plan",
+            "pay",
+            "project",
+            "report"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /p/. É surdo, a glote não vibra. Sele totalmente os lábios represando o ar, e então libere com uma explosão nítida. Sinta o sopro na palma da mão. Vamos praticar o shadowing: priceplanpayprojectreportExcelente."
+    },
+    {
+        "id_fonema": "cons_t",
+        "simbolo_ipa": "/t/",
+        "palavras_escolhidas": [
+            "time",
+            "team",
+            "tax",
+            "trade",
+            "target"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /t/. Sem vibração na garganta. Pressione a ponta da língua contra as gengivas superiores, bloqueando o ar, e dispare como um dardo. Lábios frouxos. Vamos praticar o shadowing: timeteamtaxtradetargetExcelente."
+    },
+    {
+        "id_fonema": "cons_k",
+        "simbolo_ipa": "/k/",
+        "palavras_escolhidas": [
+            "cost",
+            "cash",
+            "call",
+            "claim",
+            "contract"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /k/. Totalmente desvozeado. A parte de trás da língua bate contra o palato mole, trancando o fluxo na garganta, depois explode estalando o ar. Vamos praticar o shadowing: costcashcallclaimcontractExcelente."
+    },
+    {
+        "id_fonema": "cons_f",
+        "simbolo_ipa": "/f/",
+        "palavras_escolhidas": [
+            "fund",
+            "firm",
+            "fee",
+            "focus",
+            "flow"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /f/. Glote silenciosa. Crave gentilmente os dentes superiores no lábio inferior e force um jato contínuo de ar, gerando fricção. Língua descansa. Vamos praticar o shadowing: fundfirmfeefocusflowExcelente."
+    },
+    {
+        "id_fonema": "cons_th_unvoiced",
+        "simbolo_ipa": "/θ/",
+        "palavras_escolhidas": [
+            "think",
+            "growth",
+            "wealth",
+            "month",
+            "worth"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som surdo /θ/. Cordas vocais quietas. Faça uma cama macia com a língua repousando entre os dentes, e sopre um ar prolongado pelo pequeno vão. Vazamento constante de ar. Vamos praticar o shadowing: thinkgrowthwealthmonthworthExcelente."
+    },
+    {
+        "id_fonema": "cons_s",
+        "simbolo_ipa": "/s/",
+        "palavras_escolhidas": [
+            "sell",
+            "stock",
+            "staff",
+            "state",
+            "sign"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /s/. Nenhum vozeamento. A língua levanta apontando para o céu da boca, mas sem encostar. Escoe o ar por esse canal estreito, como um vazamento de pneu fino. Vamos praticar o shadowing: sellstockstaffstatesignExcelente."
+    },
+    {
+        "id_fonema": "cons_sh",
+        "simbolo_ipa": "/ʃ/",
+        "palavras_escolhidas": [
+            "share",
+            "shift",
+            "cash",
+            "issue",
+            "schedule"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ʃ/. Desvozeado. É o som de pedir silêncio 'Shh'. Faça bico com os lábios projetados para fora, língua larga e elevada na frente, soltando um ar contínuo e espesso. Vamos praticar o shadowing: shareshiftcashissuescheduleExcelente."
+    },
+    {
+        "id_fonema": "cons_ch",
+        "simbolo_ipa": "/tʃ/",
+        "palavras_escolhidas": [
+            "charge",
+            "chart",
+            "check",
+            "choice",
+            "change"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /tʃ/. Cordas vocais mudas. Prenda o ar com a língua atrás dos dentes como num 'T', e exploda rompendo essa barreira para o som de 'Sh'. É explosivo e rápido. Vamos praticar o shadowing: chargechartcheckchoicechangeExcelente."
+    },
+    {
+        "id_fonema": "cons_b",
+        "simbolo_ipa": "/b/",
+        "palavras_escolhidas": [
+            "brand",
+            "board",
+            "book",
+            "budget",
+            "business"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /b/. Pura vibração na glote. Pressione firmemente os lábios fechando a passagem, acione a voz e solte estourando a represa de ar e som simultaneamente. Vamos praticar o shadowing: brandboardbookbudgetbusinessExcelente."
+    },
+    {
+        "id_fonema": "cons_d",
+        "simbolo_ipa": "/d/",
+        "palavras_escolhidas": [
+            "deal",
+            "debt",
+            "down",
+            "data",
+            "date"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /d/. Fundo da garganta vibrando. Língua tocando os alvéolos superiores, cravando o ar. Libere com a pressão acionada junto à voz de maneira pontiaguda. Vamos praticar o shadowing: dealdebtdowndatadateExcelente."
+    },
+    {
+        "id_fonema": "cons_g",
+        "simbolo_ipa": "/g/",
+        "palavras_escolhidas": [
+            "growth",
+            "goal",
+            "good",
+            "group",
+            "guide"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /g/. Totalmente vozeado. Eleve o fundo da língua bloqueando a garganta e vibre soltando de supetão. O som parece nascer lá do fundo pesadamente. Vamos praticar o shadowing: growthgoalgoodgroupguideExcelente."
+    },
+    {
+        "id_fonema": "cons_v",
+        "simbolo_ipa": "/v/",
+        "palavras_escolhidas": [
+            "value",
+            "voice",
+            "view",
+            "prove",
+            "solve"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /v/. A garganta vibra como um motor. Dentes de cima roçando no lábio inferior criando um atrito intenso com vazão de ar misturado com voz, sem parar. Vamos praticar o shadowing: valuevoiceviewprovesolveExcelente."
+    },
+    {
+        "id_fonema": "cons_th_voiced",
+        "simbolo_ipa": "/ð/",
+        "palavras_escolhidas": [
+            "this",
+            "that",
+            "these",
+            "those",
+            "other"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som vozeado /ð/. Glote zumbindo ativamente. Relaxe a ponta da língua entre os dentes suavemente. Agora puxe o ar com a voz roçando a língua, como o som de uma abelha abafada. Vamos praticar o shadowing: thisthatthesethoseotherExcelente."
+    },
+    {
+        "id_fonema": "cons_z",
+        "simbolo_ipa": "/z/",
+        "palavras_escolhidas": [
+            "zero",
+            "zone",
+            "size",
+            "cause",
+            "close"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /z/. Muito vozeamento, o pescoço treme. Sorria e aproxime a língua atrás dos dentes da frente empurrando um zumbido forte de ar fino e vibrante. Vamos praticar o shadowing: zerozonesizecausecloseExcelente."
+    },
+    {
+        "id_fonema": "cons_zh",
+        "simbolo_ipa": "/ʒ/",
+        "palavras_escolhidas": [
+            "vision",
+            "measure",
+            "decision",
+            "casual",
+            "closure"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ʒ/. O motor na glote está ligado. Lábios redondos projetados para fora, língua larga subindo no palato. Solte o ar produzindo atrito vibrante e aveludado, contínuo. Vamos praticar o shadowing: visionmeasuredecisioncasualclosureExcelente."
+    },
+    {
+        "id_fonema": "cons_j",
+        "simbolo_ipa": "/dʒ/",
+        "palavras_escolhidas": [
+            "job",
+            "join",
+            "judge",
+            "margin",
+            "budget"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /dʒ/. Voz no máximo. Segure o ar pressionando a língua atrás dos dentes, depois quebre essa barreira soltando uma fricção vozeada forte de uma vez. Som de impacto. Vamos praticar o shadowing: jobjoinjudgemarginbudgetExcelente."
+    },
+    {
+        "id_fonema": "cons_m",
+        "simbolo_ipa": "/m/",
+        "palavras_escolhidas": [
+            "market",
+            "month",
+            "move",
+            "make",
+            "margin"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /m/. Muito vibrante. Feche os lábios totalmente frouxos, repousando a língua sem tensão, e mande a voz toda para sair pelo nariz, como um zumbido interno nasal. Vamos praticar o shadowing: marketmonthmovemakemarginExcelente."
+    },
+    {
+        "id_fonema": "cons_n",
+        "simbolo_ipa": "/n/",
+        "palavras_escolhidas": [
+            "name",
+            "near",
+            "net",
+            "note",
+            "now"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /n/. Glote e nariz vibrando juntos. Pressione toda a lâmina frontal da língua no céu da boca selando a passagem oral, deixando a voz escorrer pelo nariz. Vamos praticar o shadowing: namenearnetnotenowExcelente."
+    },
+    {
+        "id_fonema": "cons_ng",
+        "simbolo_ipa": "/ŋ/",
+        "palavras_escolhidas": [
+            "sing",
+            "bring",
+            "long",
+            "meeting",
+            "planning"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /ŋ/. Vozeado e muito nasal. A ponta da língua abaixa, a base dela levanta esmagando o palato mole lá no fundo. Sinta a ressonância vibrar inteira nas fossas nasais. Vamos praticar o shadowing: singbringlongmeetingplanningExcelente."
+    },
+    {
+        "id_fonema": "cons_h",
+        "simbolo_ipa": "/h/",
+        "palavras_escolhidas": [
+            "high",
+            "hire",
+            "hold",
+            "home",
+            "how"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /h/. Sem vozeamento. É puramente uma respiração exalada. Com a boca na posição da próxima vogal, suspire um ar limpo que vem do fundo da barriga, sem fricção alta. Vamos praticar o shadowing: highhireholdhomehowExcelente."
+    },
+    {
+        "id_fonema": "cons_l",
+        "simbolo_ipa": "/l/",
+        "palavras_escolhidas": [
+            "law",
+            "lead",
+            "loan",
+            "loss",
+            "level"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /l/. Glote acionada. Firme a ponta da língua no osso logo atrás dos dentes frontais e permita que o ar vozeado caia pelas beiradas da língua, derramando som lateralmente. Vamos praticar o shadowing: lawleadloanlosslevelExcelente."
+    },
+    {
+        "id_fonema": "cons_r",
+        "simbolo_ipa": "/r/",
+        "palavras_escolhidas": [
+            "rate",
+            "risk",
+            "rule",
+            "report",
+            "result"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /r/. Voz acionada no fundo da garganta. Puxe a língua para o fundo, enrolando-a ligeiramente para cima sem tocar o céu da boca, tensa, com lábios sutilmente abicados. Vamos praticar o shadowing: rateriskrulereportresultExcelente."
+    },
+    {
+        "id_fonema": "cons_w",
+        "simbolo_ipa": "/w/",
+        "palavras_escolhidas": [
+            "wealth",
+            "work",
+            "worth",
+            "win",
+            "world"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /w/. Glote vibrante como motorzinho. Lábios em bico redondo empurrados para a frente. O ar e voz saem escorregando, enquanto os lábios abrem dinamicamente. Vamos praticar o shadowing: wealthworkworthwinworldExcelente."
+    },
+    {
+        "id_fonema": "cons_y",
+        "simbolo_ipa": "/j/",
+        "palavras_escolhidas": [
+            "year",
+            "yield",
+            "yes",
+            "yet",
+            "young"
+        ],
+        "roteiro_ssml": "Bem-vindos. Hoje vamos dominar o som /j/. Fortemente vozeado. Eleve o corpo da língua duro no teto da boca espalhando a frente em um sorriso sutil e deslize impulsionando o som vigorosamente. Vamos praticar o shadowing: yearyieldyesyetyoungExcelente."
+    }
+]

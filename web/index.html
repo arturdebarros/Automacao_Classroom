@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="English Mastery — Plataforma de inglês para adultos e profissionais. Programa estruturado de 52 semanas com Grammar, Listening, Speaking, Writing, Reading e Pronunciation.">
+  <title>English Mastery — Aprenda Inglês com Confiança</title>
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+
+    /* ── Login modal ── */
+    .login-modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.8);
+      display: none; align-items: center; justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(4px);
+    }
+    .login-modal-overlay.active { display: flex; }
+
+    .login-modal {
+      background: var(--bg-card, #1A1A23);
+      border: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
+      border-radius: 20px;
+      width: 100%; max-width: 420px;
+      padding: 2rem;
+      animation: slideUp 0.3s ease-out;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-tabs {
+      display: flex;
+      background: var(--bg-surface, rgba(255,255,255,0.04));
+      border-radius: 10px;
+      padding: 3px;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-subtle, rgba(255,255,255,0.06));
+    }
+
+    .login-tab {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-muted);
+      border: none;
+      background: transparent;
+    }
+
+    .login-tab.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: var(--accent);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.01em;
+      margin-top: 0.5rem;
+    }
+
+    .btn-login:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-login:active { transform: translateY(0); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* ── Nav login button ── */
+    .nav-login-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-login-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ── Marketing hero specific ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    @media (max-width: 768px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.25s;
+    }
+    .feature-card:hover {
+      border-color: var(--border-default);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .feature-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Skill pills row */
+    .skills-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .skill-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .error-msg {
+      color: #FB7185;
+      font-size: 0.78rem;
+      min-height: 1rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Light mode support */
+    [data-theme="light"] .login-modal {
+      background: #FFFFFF;
+      border-color: #E4E4E7;
+    }
+    [data-theme="light"] .login-tabs {
+      background: #F4F4F5;
+      border-color: #E4E4E7;
+    }
+    [data-theme="light"] .feature-card {
+      background: white;
+      border-color: #E4E4E7;
+    }
+    [data-theme="light"] .feature-card:hover {
+      border-color: #D4D4D8;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background -->
+  <div class="bg-mesh" aria-hidden="true">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
+
+  <!-- ══ NAVBAR ══════════════════════════════════════════════ -->
+  <nav class="navbar" role="navigation" aria-label="Navegação principal">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">
+        <div class="navbar-logo-icon" aria-hidden="true">🎓</div>
+        <div>
+          <div class="navbar-brand">English Mastery</div>
+          <div class="navbar-sub">Plataforma de Inglês</div>
+        </div>
+      </a>
+
+      <div style="display:flex; align-items:center; gap:1rem;">
+        <!-- Theme toggle -->
+        <button
+          data-theme-toggle
+          onclick="Theme.toggle()"
+          style="background:none; border:none; cursor:pointer; font-size:1.2rem; padding:0.25rem; border-radius:8px; transition:opacity 0.2s;"
+          aria-label="Alternar tema">
+          <span data-theme-icon>☀️</span>
+        </button>
+
+        <a href="teacher.html" style="font-size:0.78rem; color:var(--text-muted); text-decoration:none; display:flex; align-items:center; gap:0.3rem;">
+          🔐 Professor
+        </a>
+
+        <button class="nav-login-btn" onclick="openLoginModal('login')" id="nav-login-btn">
+          Entrar
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ════════════════════════════════════════════════ -->
+  <section class="hero" role="banner" style="padding-top: 5rem;">
+    <div class="container">
+
+      <!-- Eyebrow tag -->
+      <div class="hero-eyebrow" aria-label="Programa de inglês">
+        ✦ Programa de 52 Semanas para Adultos e Profissionais
+      </div>
+
+      <!-- Hero title (PT-BR) -->
+      <h1 class="hero-title">
+        Domine o Inglês.<br>
+        <span style="background: linear-gradient(135deg, #3B82F6 0%, #818CF8 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">
+          Do Básico ao Avançado.
+        </span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Uma plataforma completa para adultos aprenderem inglês com um programa estruturado, progressivo e focado em comunicação real. Grammar, Listening, Speaking, Writing, Reading e Pronunciation — tudo em um só lugar.
+      </p>
+
+      <!-- CTA buttons -->
+      <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top: 2rem;">
+        <button class="btn btn-primary btn-lg" onclick="openLoginModal('register')" id="cta-start-btn">
+          🚀 Começar Gratuitamente
+        </button>
+        <button class="btn btn-secondary btn-lg" onclick="openLoginModal('login')">
+          Já tenho conta →
+        </button>
+      </div>
+
+      <!-- Skill pills -->
+      <div class="skills-pills" aria-label="Habilidades cobertas">
+        <span class="skill-pill" style="color:#818CF8; border-color:rgba(129,140,248,0.3); background:rgba(129,140,248,0.08)">📖 Grammar</span>
+        <span class="skill-pill" style="color:#2DD4BF; border-color:rgba(45,212,191,0.3); background:rgba(45,212,191,0.08)">🎧 Listening</span>
+        <span class="skill-pill" style="color:#FBBF24; border-color:rgba(251,191,36,0.3); background:rgba(251,191,36,0.08)">🗣️ Speaking</span>
+        <span class="skill-pill" style="color:#FB7185; border-color:rgba(251,113,133,0.3); background:rgba(251,113,133,0.08)">✍️ Writing</span>
+        <span class="skill-pill" style="color:#38BDF8; border-color:rgba(56,189,248,0.3); background:rgba(56,189,248,0.08)">👁️ Reading</span>
+        <span class="skill-pill" style="color:#C084FC; border-color:rgba(192,132,252,0.3); background:rgba(192,132,252,0.08)">🔊 Pronunciation</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="hero-stats" aria-label="Estatísticas da plataforma">
+        <div class="hero-stat">
+          <div class="hero-stat-number">52</div>
+          <div class="hero-stat-label">Semanas de Conteúdo</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">260</div>
+          <div class="hero-stat-label">Atividades Estruturadas</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">6</div>
+          <div class="hero-stat-label">Habilidades</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">44</div>
+          <div class="hero-stat-label">Fonemas do Inglês</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FEATURES SECTION ════════════════════════════════════ -->
+  <section style="padding: 4rem 0; position:relative; z-index:1;">
+    <div class="container">
+
+      <div class="section-header">
+        <h2 class="section-title">Por que English Mastery?</h2>
+        <p class="section-subtitle">
+          Desenvolvido para adultos e profissionais que querem resultados reais, não apenas teoria.
+        </p>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">🗂️</div>
+          <div class="feature-title">Programa Progressivo e Estruturado</div>
+          <div class="feature-desc">52 semanas de conteúdo organizado do básico ao avançado, com 5 atividades por semana e um tema central por fase.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔥</div>
+          <div class="feature-title">Gamificação Inteligente</div>
+          <div class="feature-desc">Sequência de estudo diária, mapa de calor de progresso e barras de domínio por habilidade — para manter a motivação.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🗣️</div>
+          <div class="feature-title">Speaking com Gravação de Voz</div>
+          <div class="feature-desc">Grave suas respostas diretamente no navegador para praticar pronúncia e fluência com feedback imediato.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔊</div>
+          <div class="feature-title">Explorer de 44 Fonemas</div>
+          <div class="feature-desc">Explore todos os 44 fonemas do inglês com exemplos de palavras, dicas de pronúncia e roteiros de prática.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Painel Visual de Progresso</div>
+          <div class="feature-desc">Veja seu avanço em cada habilidade com gráficos circulares de domínio e um histórico de estudo visual ao estilo GitHub.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">👩‍🏫</div>
+          <div class="feature-title">Conteúdo do Seu Professor</div>
+          <div class="feature-desc">Seu professor pode enriquecer qualquer semana com atividades personalizadas, áudios e exercícios específicos para a turma.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <p>🎓 English Mastery — Projetado para excelência no aprendizado de inglês.</p>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LOGIN / REGISTER MODAL
+  ══════════════════════════════════════════════════════════ -->
+  <div class="login-modal-overlay" id="login-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+    <div class="login-modal">
+
+      <!-- Close -->
+      <button onclick="closeLoginModal()"
+        style="position:absolute; top:1rem; right:1rem; background:none; border:none; cursor:pointer; font-size:1.2rem; color:var(--text-muted); padding:0.25rem;"
+        aria-label="Fechar">✕</button>
+
+      <!-- Logo -->
+      <div style="text-align:center; margin-bottom:1.25rem;">
+        <div style="font-size:2rem; margin-bottom:0.25rem;">🎓</div>
+        <h1 id="login-modal-title" style="font-size:1.15rem; font-weight:800; color:var(--text-primary); letter-spacing:-0.02em;">
+          English Mastery
+        </h1>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.2rem;">Acesso do Aluno</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="login-tabs" role="tablist">
+        <button class="login-tab active" id="tab-login" role="tab" aria-selected="true" onclick="switchTab('login')">
+          Entrar
+        </button>
+        <button class="login-tab" id="tab-register" role="tab" aria-selected="false" onclick="switchTab('register')">
+          Criar Conta
+        </button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="login-username">Usuário</label>
+          <input class="form-input" type="text" id="login-username"
+            placeholder="seu_usuario" autocomplete="username" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Senha</label>
+          <input class="form-input" type="password" id="login-password"
+            placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <div class="error-msg" id="login-error" role="alert"></div>
+        <button type="submit" class="btn-login" id="login-btn">Entrar →</button>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form id="register-form" style="display:none;" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="reg-name">Nome Completo</label>
+          <input class="form-input" type="text" id="reg-name"
+            placeholder="Seu Nome" autocomplete="name" required>
+        </div>
+        <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+          <div class="form-group">
+            <label class="form-label" for="reg-username">Usuário</label>
+            <input class="form-input" type="text" id="reg-username"
+              placeholder="seu_usuario" autocomplete="username" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-class">Código da Turma</label>
+            <input class="form-input" type="text" id="reg-class"
+              placeholder="Ex: TURMA2025" autocomplete="off" maxlength="20">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Senha</label>
+          <input class="form-input" type="password" id="reg-password"
+            placeholder="Mínimo 4 caracteres" autocomplete="new-password" required>
+        </div>
+        <div class="error-msg" id="register-error" role="alert"></div>
+        <button type="submit" class="btn-login" id="register-btn">Criar Conta →</button>
+      </form>
+
+      <!-- Switch hint -->
+      <p id="switch-hint" style="text-align:center; font-size:0.78rem; color:var(--text-muted); margin-top:1rem;">
+        Não tem conta?
+        <button onclick="switchTab('register')" style="background:none; border:none; cursor:pointer; color:var(--accent); font-weight:600; font-size:0.78rem; padding:0;">
+          Criar agora
+        </button>
+      </p>
+    </div>
+  </div>
+
+  <!-- ══ SCRIPTS ═════════════════════════════════════════════ -->
+  <script src="js/theme.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    // Init theme
+    Theme.init();
+
+    // Redirect if already logged in
+    if (Auth.isLoggedIn()) {
+      const user = Auth.getCurrentUser();
+      if (user) {
+        if (user.role === 'student') window.location.href = 'dashboard.html';
+        else if (user.role === 'teacher') window.location.href = 'teacher.html';
+        else if (user.role === 'coordinator') window.location.href = 'coordinator.html';
+      }
+    }
+
+    // ── Modal ─────────────────────────────────────────────────
+    function openLoginModal(tab = 'login') {
+      document.getElementById('login-modal-overlay').classList.add('active');
+      switchTab(tab);
+    }
+
+    function closeLoginModal() {
+      document.getElementById('login-modal-overlay').classList.remove('active');
+      clearErrors();
+    }
+
+    document.getElementById('login-modal-overlay')?.addEventListener('click', e => {
+      if (e.target.id === 'login-modal-overlay') closeLoginModal();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLoginModal();
+    });
+
+    // ── Tab switch ────────────────────────────────────────────
+    function switchTab(tab) {
+      const isLogin = tab === 'login';
+
+      document.getElementById('login-form').style.display    = isLogin ? '' : 'none';
+      document.getElementById('register-form').style.display = isLogin ? 'none' : '';
+      document.getElementById('tab-login').classList.toggle('active', isLogin);
+      document.getElementById('tab-register').classList.toggle('active', !isLogin);
+
+      const hint = document.getElementById('switch-hint');
+      if (hint) {
+        hint.innerHTML = isLogin
+          ? `Não tem conta? <button onclick="switchTab('register')" style="background:none;border:none;cursor:pointer;color:var(--accent);font-weight:600;font-size:0.78rem;padding:0;">Criar agora</button>`
+          : `Já tem conta? <button onclick="switchTab('login')" style="background:none;border:none;cursor:pointer;color:var(--accent);font-weight:600;font-size:0.78rem;padding:0;">Entrar</button>`;
+      }
+
+      clearErrors();
+    }
+
+    function clearErrors() {
+      document.getElementById('login-error').textContent    = '';
+      document.getElementById('register-error').textContent = '';
+    }
+
+    // ── Login ─────────────────────────────────────────────────
+    document.getElementById('login-form')?.addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      const err = document.getElementById('login-error');
+      btn.disabled = true;
+      btn.textContent = 'Entrando...';
+      err.textContent = '';
+
+      try {
+        const user = await Auth.login({
+          username: document.getElementById('login-username').value,
+          password: document.getElementById('login-password').value,
+        });
+        if (user.role === 'student') window.location.href = 'dashboard.html';
+        else if (user.role === 'teacher') window.location.href = 'teacher.html';
+        else if (user.role === 'coordinator') window.location.href = 'coordinator.html';
+      } catch (ex) {
+        err.textContent = ex.message;
+        btn.disabled = false;
+        btn.textContent = 'Entrar →';
+      }
+    });
+
+    // ── Register ──────────────────────────────────────────────
+    document.getElementById('register-form')?.addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = document.getElementById('register-btn');
+      const err = document.getElementById('register-error');
+      btn.disabled = true;
+      btn.textContent = 'Criando conta...';
+      err.textContent = '';
+
+      try {
+        await Auth.register({
+          displayName: document.getElementById('reg-name').value,
+          username:    document.getElementById('reg-username').value,
+          password:    document.getElementById('reg-password').value,
+          classCode:   document.getElementById('reg-class').value,
+        });
+        window.location.href = 'dashboard.html';
+      } catch (ex) {
+        err.textContent = ex.message;
+        btn.disabled = false;
+        btn.textContent = 'Criar Conta →';
+      }
+    });
+  </script>
+</body>
+</html>
